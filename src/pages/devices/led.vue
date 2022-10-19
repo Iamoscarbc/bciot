@@ -3,6 +3,7 @@
       <v-col cols="12" class="d-flex flex-column" v-if="!loading">
         <h2>LED</h2>
         <span>Estado: {{ stateLight.typeLight }}</span>
+        <span>Último tiempo de ida y vuelta: {{ duration }}</span>
         <v-btn 
         width="120"
         @click="sendStateService()"
@@ -28,9 +29,13 @@ export default {
     layout: 'auth',
     data(){
       return {
-        stateLight: '',
-        values: ['Rojo','Verde'],
-        loading: true
+        stateLight: {
+          comando: 'Encender',
+          typeLight: ''
+        },
+        values: ['Apagar','Encender'],
+        loading: true,
+        duration: 0
       }
     },
     methods: {
@@ -53,7 +58,8 @@ export default {
           this.loading = true
           let res = await this.sendState(this.negativeValue)
           if(res.status){
-            console.log("res", res)
+            this.duration = res.data.duration
+            await this.getStateService()
           }
         } catch (error) {
           console.log("error", error)
@@ -67,7 +73,7 @@ export default {
         return this.values.filter(x => x != this.stateLight.comando)[0]
       },
       nextLight(){
-        if(this.stateLight.comando == 'Rojo'){
+        if(this.stateLight.comando == 'Apagar'){
           return {
             text: 'Encender',
             color: 'green'
