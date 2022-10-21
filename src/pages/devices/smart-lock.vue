@@ -3,8 +3,9 @@
     <v-col cols="12" class="d-flex flex-column" v-if="!loading">
       <h2>Smart Lock</h2>
       <span>Estado: {{ stateLock.typeLock }}</span>
+      <span v-if="duration">Último tiempo de ida y vuelta: {{ duration }}</span>
       <v-btn 
-      width="120"
+      width="150"
       @click="sendStateService()"
       :color="nextLock.color">
         <v-icon>
@@ -28,9 +29,13 @@ export default {
   layout: 'auth',
   data(){
     return {
-      stateLock: '',
-      values: ['Rojo','Verde'],
-      loading: true
+      stateLock: {
+        comando: 'open',
+        typeLock: 'Cerradura bloqueada'
+      },
+      values: ['open','close'],
+      loading: true,
+      duration: 0
     }
   },
   methods: {
@@ -53,7 +58,8 @@ export default {
         this.loading = true
         let res = await this.sendState(this.negativeValue)
         if(res.status){
-          console.log("res", res)
+            this.duration = res.data.duration
+            await this.getStateService()
         }
       } catch (error) {
         console.log("error", error)
@@ -67,14 +73,14 @@ export default {
       return this.values.filter(x => x != this.stateLock.comando)[0]
     },
     nextLock(){
-      if(this.stateLock.comando == 'Rojo'){
+      if(this.stateLock.comando == 'close'){
         return {
-          text: 'Encender',
+          text: 'Desbloquear',
           color: 'green'
         }
       }
       return {
-        text: 'Apagar',
+        text: 'Bloquear',
         color: 'red'
       }
     }

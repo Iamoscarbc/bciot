@@ -3,7 +3,7 @@
       <v-col cols="12" class="d-flex flex-column" v-if="!loading">
         <h2>LED</h2>
         <span>Estado: {{ stateLight.typeLight }}</span>
-        <span>Último tiempo de ida y vuelta: {{ duration }}</span>
+        <span v-if="duration">Último tiempo de ida y vuelta: {{ duration }}</span>
         <v-btn 
         width="120"
         @click="sendStateService()"
