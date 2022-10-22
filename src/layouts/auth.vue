@@ -60,6 +60,11 @@ export default {
         },
         {
           icon: 'mdi-apps',
+          title: 'Foco Inteligente',
+          to: '/devices/smart-light'
+        },
+        {
+          icon: 'mdi-apps',
           title: 'LED',
           to: '/devices/led'
         }
