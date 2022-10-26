@@ -2,3 +2,55 @@
 //
 // The variables you want to modify
 // $font-size-root: 20px;
+
+@for $var from 1 to 41 {
+    .font-size-#{$var}{
+        font-size: #{$var}+'px';
+    }
+}
+
+@for $var from 100 to 900 {
+    .font-weight-#{$var}{
+        font-weight: #{$var}+'px';
+    }
+}
+
+@font-face {
+    font-family: "CodecPro";
+    font-style: normal;
+    font-weight: 100;
+    src: local('CodecPro-ExtraLight'),
+    local('CodecPro ExtraLight'),
+    url(@/assets/fonts/CodecPro/CodecPro-ExtraLight.otf) format('otf');
+}
+
+@font-face {
+    font-family: "CodecPro";
+    font-style: normal;
+    font-weight: 400;
+    src: local('CodecPro-Regular'),
+    local('CodecPro Regular'),
+    url(@/assets/fonts/CodecPro/CodecPro-Regular.otf) format('otf');
+}
+
+@font-face {
+    font-family: "CodecPro";
+    font-style: normal;
+    font-weight: 700;
+    src: local('CodecPro-Bold'),
+    local('CodecPro Bold'),
+    url(@/assets/fonts/CodecPro/CodecPro-Bold.otf) format('otf');
+}
+
+@font-face {
+    font-family: "CodecPro";
+    font-style: normal;
+    font-weight: 900;
+    src: local('CodecPro-ExtraBold'),
+    local('CodecPro ExtraBold'),
+    url(@/assets/fonts/CodecPro/CodecPro-ExtraBold.otf) format('otf');
+}
+
+.v-application {
+    font-family: "CodecPro", sans-serif;
+}
