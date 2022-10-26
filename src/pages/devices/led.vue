@@ -30,7 +30,7 @@ export default {
     data(){
       return {
         stateLight: {
-          comando: 'Encender',
+          command: 'Encender',
           typeLight: ''
         },
         values: ['Apagar','Encender'],
@@ -70,10 +70,10 @@ export default {
     },
     computed: {
       negativeValue(){
-        return this.values.filter(x => x != this.stateLight.comando)[0]
+        return this.values.filter(x => x != this.stateLight.command)[0]
       },
       nextLight(){
-        if(this.stateLight.comando == 'Apagar'){
+        if(this.stateLight.command == 'Apagar'){
           return {
             text: 'Encender',
             color: 'green'
