@@ -3,9 +3,9 @@
 // The variables you want to modify
 // $font-size-root: 20px;
 
-@for $var from 1 to 75 {
+@for $var from 1 to 275 {
     .font-size-#{$var}{
-        font-size: #{$var}+'px';
+        font-size: #{$var}+'px' !important;
     }
 }
 
@@ -13,7 +13,7 @@ $weight: 100, 200, 3000, 400, 500, 600, 700, 800, 900;
 
 @each $var in $weight {
     .font-weight-#{$var}{
-        font-weight: #{$var};
+        font-weight: #{$var} !important;
     }
 }
 

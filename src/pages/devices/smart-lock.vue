@@ -1,18 +1,24 @@
 <template>
   <v-row justify="center" align="center">
-    <v-col cols="12" class="d-flex flex-column" v-if="!loading">
+    <v-col cols="12" class="d-flex flex-column align-start" v-if="!loading">
       <h2>Smart Lock</h2>
       <span>Estado: {{ stateLock.typeLock }}</span>
       <span v-if="duration">Último tiempo de ida y vuelta: {{ duration }}</span>
-      <v-btn 
-      width="150"
-      @click="sendStateService()"
-      :color="nextLock.color">
-        <v-icon>
-          mdi-power
-        </v-icon>
-        {{ nextLock.text }}
-      </v-btn>
+      <v-row>
+        <v-col class="d-flex flex-column align-center">
+          <v-icon class="font-size-220" color="green" v-if="stateLock.command == 'open'">mdi-door-open</v-icon>
+          <v-icon class="font-size-220" color="red" v-else>mdi-door-closed-lock</v-icon>
+          <v-btn 
+          width="200"
+          @click="sendStateService()"
+          :color="nextLock.color">
+            <v-icon>
+              mdi-power
+            </v-icon>
+            {{ nextLock.text }}
+          </v-btn>
+        </v-col>
+      </v-row>
     </v-col>
     <v-col cols="12" class="d-flex flex-column" v-else>
       <v-progress-circular
@@ -30,8 +36,8 @@ export default {
   data(){
     return {
       stateLock: {
-        comando: 'open',
-        typeLock: 'Cerradura bloqueada'
+        command: 'open',
+        typeLock: 'Cerradura desbloqueada'
       },
       values: ['open','close'],
       loading: true,
@@ -70,10 +76,10 @@ export default {
   },
   computed: {
     negativeValue(){
-      return this.values.filter(x => x != this.stateLock.comando)[0]
+      return this.values.filter(x => x != this.stateLock.command)[0]
     },
     nextLock(){
-      if(this.stateLock.comando == 'close'){
+      if(this.stateLock.command == 'close'){
         return {
           text: 'Desbloquear',
           color: 'green'

@@ -4,16 +4,25 @@
       <h2>Smart Light</h2>
       <span>Estado: {{ stateLight.typeLight }}</span>
       <span v-if="duration">Último tiempo de ida y vuelta: {{ duration }}</span>
-      <ColorPicker :hue="color.hue" @input="onInput" @select="onSelect"></ColorPicker>
-      <v-btn 
-      width="120"
-      @click="sendStateService('Apagar')"
-      color="red">
-        <v-icon>
-          mdi-power
-        </v-icon>
-        {{ nextLight.text }}
-      </v-btn>
+      <v-row>
+        <v-col cols="3" class="d-flex flex-column align-center">
+          <v-icon class="font-size-220" :color="colorForIcon" v-if="stateLight.typeLight != 'Apagado'">mdi-lightbulb-on</v-icon>
+          <v-icon class="font-size-220" v-else>mdi-lightbulb-off</v-icon>
+          <v-btn v-if="stateLight.typeLight != 'Apagado'"
+          class="mt-5"
+          width="120"
+          @click="sendStateService('Apagar')"
+          color="red">
+            <v-icon>
+              mdi-power
+            </v-icon>
+            {{ nextLight.text }}
+          </v-btn>
+        </v-col>
+        <v-col cols="3">
+          <ColorPicker :hue="color.hue" @input="onInput" @select="onSelect"></ColorPicker>
+        </v-col>
+      </v-row>
     </v-col>
     <v-col cols="12" class="d-flex flex-column" v-else>
       <v-progress-circular
@@ -39,7 +48,9 @@ export default {
         alpha: 1,
         rgb: 0,
       },
-      stateLight: '',
+      stateLight: {
+        typeLight: "Apagado"
+      },
       values: ['Rojo','Verde'],
       loading: true,
       duration: 0
@@ -155,10 +166,10 @@ export default {
   },
   computed: {
     negativeValue(){
-      return this.values.filter(x => x != this.stateLight.comando)[0]
+      return this.values.filter(x => x != this.stateLight.command)[0]
     },
     nextLight(){
-      if(this.stateLight.comando == 'Rojo'){
+      if(this.stateLight.command == 'Rojo'){
         return {
           text: 'Encender',
           color: 'green'
@@ -168,10 +179,16 @@ export default {
         text: 'Apagar',
         color: 'red'
       }
+    },
+    colorForIcon(){
+      let { r, g, b } = this.color.rgb
+      let rgb = `${r}:${g}:${b}`
+      return `rgb(${r},${g},${b})`
     }
   },
   async mounted() {
     await this.getStateService()
+    await this.onInput(50)
   }
 }
 </script>
