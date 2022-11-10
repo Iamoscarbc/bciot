@@ -25,8 +25,13 @@
 <script>
 import { mapActions } from 'vuex'
 export default {
-    name: 'LEDPage',
-    layout: 'auth',
+    name: 'LEDComponent',
+    props:{
+        blockchain: {
+            type: String,
+            default: 'Public'
+        }
+    },
     data(){
       return {
         stateLight: {
