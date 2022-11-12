@@ -1,43 +1,84 @@
 <template>
-    <VueApexCharts :type="graphic.type" :options="graphic.chartOptions" :series="graphic.series"></VueApexCharts>
+    <VueApexCharts :type="graphic.type" :options="graphic.chartOptions" :series="series"></VueApexCharts>
 </template>
 <script>
+import { firestore } from '~/plugins/firebase.js'
+import { collection, onSnapshot, query, where, orderBy } from '@firebase/firestore'
 export default {
-    name: 'PublicBlockchain',
-    data() {
-      return {
-        graphic:{
-          chartOptions: {
-            chart: {
-              id: 'public-blockchain',
-              width: '100%'
-            },
+  name: 'PublicBlockchain',
+  data() {
+    return {
+      graphic:{
+        chartOptions: {
+          chart: {
+            id: 'public-blockchain',
+            width: '100%'
+          },
+          title:{
+            text: 'TIV - Blockchain Pública',
+            align: 'center'
+          },
+          xaxis: {
+            categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998],
             title:{
-              text: 'TIV - Blockchain Pública',
-              align: 'center'
-            },
-            xaxis: {
-              categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998],
-              title:{
-                text: 'Transacciones'
-              }
-            },
-            yaxis: {
-              title:{
-                text: 'Tiempo (segundos)'
-              }
-            },
-            stroke: {
-              curve: 'stepline',
+              text: 'Transacciones'
             }
           },
-          series: [{
-            name: 'Tiempo (segundos)',
-            data: [30, 40, 45, 50, 49, 60, 70, 91]
-          }],
-          type: 'area'
-        }
-      }
+          yaxis: {
+            title:{
+              text: 'Tiempo (segundos)'
+            }
+          },
+          stroke: {
+            curve: 'stepline',
+          }
+        },
+        series: [{
+          name: 'Tiempo (segundos)',
+          data: [30, 40, 45, 50, 49, 60, 70, 91]
+        }],
+        type: 'area'
+      },
+      items: []
     }
+  },
+  computed:{
+    series(){
+      let _this = this
+      this.items.map((x) => {
+          x.x = _this.transformDate(x.created_at),
+          x.y = Number(x.duration.toFixed(2))
+      })
+      return [{
+          name: 'Duration',
+          data: this.items
+      }]
+    }
+  },
+  methods:{
+    async getTimes(){
+      const timesQuery = query(
+        collection(firestore, 'times'),
+        where("blockchain_type", "==", "Public"),
+        orderBy("created_at")
+      )
+      onSnapshot(timesQuery, (querySnapShot) => {
+        this.items = querySnapShot.docs.map((e) => {
+          return {
+            ...e.data(),
+            id: e.id
+          }
+        })
+      })
+    },
+    transformDate(param){
+      let millis = param.toMillis()
+      let date = new Date(millis)
+      return this.$moment(date).format('DD/MM/YYYY [|] hh:mm:ss')
+    }
+  },
+  async mounted(){
+    await this.getTimes()
+  }
 }
 </script>
