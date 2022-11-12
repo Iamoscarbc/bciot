@@ -30,6 +30,8 @@
   
   <script>
   import { mapActions } from 'vuex'
+  import { firestore } from '~/plugins/firebase.js'
+  import { addDoc, collection, serverTimestamp } from '@firebase/firestore'
   export default {
     name: 'SmartLockComponent',
     props:{
