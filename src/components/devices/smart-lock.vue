@@ -56,7 +56,7 @@
       async getStateService(){
         try {
           this.loading = true
-          let res = await this.getState()
+          let res = await this.getState({ blockchain: this.blockchain })
           if(res.status){
             this.stateLock = res.data
           }
@@ -69,7 +69,11 @@
       async sendStateService(){
         try {
           this.loading = true
-          let res = await this.sendState(this.negativeValue)
+          let payload = {
+            command: this.negativeValue,
+            blockchain: this.blockchain
+          }
+          let res = await this.sendState(payload)
           if(res.status){
             this.duration = res.data.duration
             await this.createTimes(res.data)
