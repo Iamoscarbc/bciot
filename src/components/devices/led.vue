@@ -24,6 +24,8 @@
   
 <script>
 import { mapActions } from 'vuex'
+import { firestore } from '~/plugins/firebase.js'
+import { addDoc, collection, serverTimestamp } from '@firebase/firestore'
 export default {
     name: 'LEDComponent',
     props:{
@@ -68,6 +70,7 @@ export default {
           let res = await this.sendState(payload)
           if(res.status){
             this.duration = res.data.duration
+            await this.createTimes(res.data)
             await this.getStateService()
           }
         } catch (error) {
@@ -75,6 +78,15 @@ export default {
         } finally {
           this.loading = false
         }
+      },
+      async createTimes({ duration }){
+        const timesCollection = collection(firestore, 'times')
+        const newDoc = await addDoc(timesCollection, {
+          blockchain_type: this.blockchain,
+          device:"LED",
+          duration: duration,
+          created_at: serverTimestamp()
+        })
       }
     },
     computed: {
