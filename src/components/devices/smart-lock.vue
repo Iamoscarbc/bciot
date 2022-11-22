@@ -26,12 +26,12 @@
         ></v-progress-circular>
       </v-col>
     </v-row>
-  </template>
+</template>
   
-  <script>
+<script>
   import { mapActions } from 'vuex'
   import { firestore } from '~/plugins/firebase.js'
-  import { addDoc, collection, serverTimestamp } from '@firebase/firestore'
+  import { addDoc, collection, serverTransactionstamp } from '@firebase/firestore'
   export default {
     name: 'SmartLockComponent',
     props:{
@@ -76,7 +76,7 @@
           let res = await this.sendState(payload)
           if(res.status){
             this.duration = res.data.duration
-            await this.createTimes(res.data)
+            await this.createTransactions(res.data)
             await this.getStateService()
           }
         } catch (error) {
@@ -85,12 +85,13 @@
           this.loading = false
         }
       },
-      async createTimes({ duration }){
-        const timesCollection = collection(firestore, 'times')
-        const newDoc = await addDoc(timesCollection, {
+      async createTransactions({ duration, pcr }){
+        const transactionsCollection = collection(firestore, 'transactions')
+        const newDoc = await addDoc(transactionsCollection, {
           blockchain_type: this.blockchain,
           device:"SmartLock",
-          duration: duration,
+          duration,
+          pcr,
           created_at: serverTimestamp()
         })
       }
@@ -116,5 +117,4 @@
       await this.getStateService()
     }
   }
-  </script>
-  
+</script>

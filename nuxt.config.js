@@ -4,6 +4,7 @@ export default {
   env: {
     API_URL: process.env.API_URL
   },
+  //Este es el arroba para instanciar los componentes (@/components/devices/smart-lock.vue)
   srcDir: 'src/',
   // Global page headers: https://go.nuxtjs.dev/config-head
   head: {

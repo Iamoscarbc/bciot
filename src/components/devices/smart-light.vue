@@ -30,13 +30,13 @@
         ></v-progress-circular>
       </v-col>
     </v-row>
-  </template>
+</template>
   
-  <script>
+<script>
   import { mapActions } from 'vuex'
   import ColorPicker from '@/lib/ColorPicker.vue';
   import { firestore } from '~/plugins/firebase.js'
-  import { addDoc, collection, serverTimestamp } from '@firebase/firestore'
+  import { addDoc, collection, serverTransactionstamp } from '@firebase/firestore'
   export default {
     name: 'SmartLightComponent',
     components: { ColorPicker },
@@ -88,7 +88,7 @@
           let res = await this.sendState(payload)
           if(res.status){
             this.duration = res.data.duration
-            await this.createTimes(res.data)
+            await this.createTransactions(res.data)
             await this.getStateService()
           }
         } catch (error) {
@@ -175,12 +175,13 @@
                       hex = '0'+hex;
         return {r,g,b}
       },
-      async createTimes({ duration }){
-        const timesCollection = collection(firestore, 'times')
-        const newDoc = await addDoc(timesCollection, {
+      async createTransactions({ duration, pcr }){
+        const transactionsCollection = collection(firestore, 'transactions')
+        const newDoc = await addDoc(transactionsCollection, {
           blockchain_type: this.blockchain,
           device:"SmartLight",
-          duration: duration,
+          duration,
+          pcr,
           created_at: serverTimestamp()
         })
       },
@@ -212,5 +213,4 @@
       await this.onInput(50)
     }
   }
-  </script>
-  
+</script>

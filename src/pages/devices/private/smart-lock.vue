@@ -5,7 +5,7 @@
 <script>
 import SmartLockComponent from '@/components/devices/smart-lock.vue';
 export default {
-  name: 'SmartLockPage',
+  name: 'SmartLockPagePrivate',
   layout: 'auth',
   components: { SmartLockComponent },
   data(){
