@@ -36,7 +36,7 @@
   import { mapActions } from 'vuex'
   import ColorPicker from '@/lib/ColorPicker.vue';
   import { firestore } from '~/plugins/firebase.js'
-  import { addDoc, collection, serverTransactionstamp } from '@firebase/firestore'
+  import { addDoc, collection, serverTimestamp } from '@firebase/firestore'
   export default {
     name: 'SmartLightComponent',
     components: { ColorPicker },

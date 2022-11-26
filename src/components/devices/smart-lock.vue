@@ -31,7 +31,7 @@
 <script>
   import { mapActions } from 'vuex'
   import { firestore } from '~/plugins/firebase.js'
-  import { addDoc, collection, serverTransactionstamp } from '@firebase/firestore'
+  import { addDoc, collection, serverTimestamp } from '@firebase/firestore'
   export default {
     name: 'SmartLockComponent',
     props:{
@@ -76,6 +76,7 @@
           let res = await this.sendState(payload)
           if(res.status){
             this.duration = res.data.duration
+            console.log("res.data", res.data)
             await this.createTransactions(res.data)
             await this.getStateService()
           }
