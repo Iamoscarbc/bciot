@@ -60,13 +60,13 @@ export default {
     }
   },
   methods:{
-    async getTimes(){
-      const timesQuery = query(
-        collection(firestore, 'times'),
+    async getTransactions(){
+      const transactionsQuery = query(
+        collection(firestore, 'transactions'),
         where("blockchain_type", "==", "Private"),
         orderBy("created_at")
       )
-      onSnapshot(timesQuery, (querySnapShot) => {
+      onSnapshot(transactionsQuery, (querySnapShot) => {
         this.items = querySnapShot.docs.map((e) => {
           return {
             ...e.data(),
@@ -82,7 +82,7 @@ export default {
     }
   },
   async mounted(){
-    await this.getTimes()
+    await this.getTransactions()
   }
 }
 </script>
