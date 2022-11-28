@@ -1,7 +1,7 @@
 <template>
     <v-row justify="center" align="center">
       <v-col cols="12" class="d-flex flex-column" v-if="!loading">
-        <h2>Smart Light</h2>
+        <h2>Smart Light {{blockchain}}</h2>
         <span>Estado: {{ stateLight.typeLight }}</span>
         <span v-if="duration">Último tiempo de ida y vuelta: {{ duration }}</span>
         <v-row>

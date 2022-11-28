@@ -1,7 +1,7 @@
 <template>
     <v-row justify="center" align="center">
       <v-col cols="12" class="d-flex flex-column align-start" v-if="!loading">
-        <h2>Smart Lock</h2>
+        <h2>Smart Lock {{blockchain}}</h2>
         <span>Estado: {{ stateLock.typeLock }}</span>
         <span v-if="duration">Último tiempo de ida y vuelta: {{ duration }}</span>
         <v-row>
