@@ -1,5 +1,5 @@
 <template>
-    <VueApexCharts :type="graphic.type" :options="graphic.chartOptions" :series="series"></VueApexCharts>
+    <VueApexCharts ref="graphicPublicBlockchain" :type="graphic.type" :options="graphic.chartOptions" :series="series"></VueApexCharts>
 </template>
 <script>
 import { firestore } from '~/plugins/firebase.js'
@@ -16,6 +16,10 @@ export default {
           },
           title:{
             text: 'TIV - Blockchain Pública',
+            align: 'center'
+          },
+          subtitle:{
+            text: 'Promedio: -',
             align: 'center'
           },
           xaxis: {
@@ -40,6 +44,13 @@ export default {
         type: 'area'
       },
       items: []
+    }
+  },
+  watch:{
+    items(val){
+      if(val.length != 0){
+        this.getAverage()
+      }
     }
   },
   computed:{
@@ -75,6 +86,13 @@ export default {
       let millis = param.toMillis()
       let date = new Date(millis)
       return this.$moment(date).format('DD/MM/YYYY [|] hh:mm:ss')
+    },
+    getAverage(){
+      let arrDuration = this.items.map(x => x.duration)
+      let sum = arrDuration.reduce((a, b) => a + b, 0)
+      let average = sum/arrDuration.length
+      this.graphic.chartOptions.subtitle.text = `Promedio: ${average.toFixed(2)}`
+      this.$refs.graphicPublicBlockchain.updateOptions(this.graphic.chartOptions, false ,true)
     }
   },
   async mounted(){

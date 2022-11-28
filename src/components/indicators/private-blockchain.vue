@@ -1,5 +1,5 @@
 <template>
-    <VueApexCharts :type="graphic.type" :options="graphic.chartOptions" :series="series"></VueApexCharts>
+    <VueApexCharts ref="graphicPrivateBlockchain" :type="graphic.type" :options="graphic.chartOptions" :series="series"></VueApexCharts>
 </template>
 <script>
 import { firestore } from '~/plugins/firebase.js'
@@ -18,6 +18,10 @@ export default {
             text: 'TIV - Blockchain Privada',
             align: 'center'
           },
+          subtitle:{
+            text: 'Promedio: -',
+            align: 'center'
+          },
           xaxis: {
             categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998],
             title:{
@@ -29,7 +33,7 @@ export default {
           },
           yaxis: {
             title:{
-              text: 'Tiempo (milisegundos)'
+              text: 'Tiempo (segundos)'
             }
           },
           colors: ['orange'],
@@ -38,12 +42,19 @@ export default {
           }
         },
         series: [{
-          name: 'Tiempo (milisegundos)',
+          name: 'Tiempo (segundos)',
           data: [30, 40, 45, 50, 49, 60, 70, 91]
         }],
         type: 'area'
       },
       items: []
+    }
+  },
+  watch:{
+    items(val){
+      if(val.length != 0){
+        this.getAverage()
+      }
     }
   },
   computed:{
@@ -79,6 +90,13 @@ export default {
       let millis = param.toMillis()
       let date = new Date(millis)
       return this.$moment(date).format('DD/MM/YYYY [|] hh:mm:ss')
+    },
+    getAverage(){
+      let arrDuration = this.items.map(x => x.duration)
+      let sum = arrDuration.reduce((a, b) => a + b, 0)
+      let average = sum/arrDuration.length
+      this.graphic.chartOptions.subtitle.text = `Promedio: ${average.toFixed(2)}`
+      this.$refs.graphicPrivateBlockchain.updateOptions(this.graphic.chartOptions, false ,true)
     }
   },
   async mounted(){
