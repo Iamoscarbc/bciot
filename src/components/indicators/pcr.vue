@@ -19,9 +19,18 @@ export default {
             align: 'center'
           },
           xaxis: {
-            categories: [1991, 1992, 1993, 1994, 1995, 1996, 1997, 1998],
+            categories: [],
             title:{
               text: 'Transacciones'
+            },
+            position: 'bottom',
+            offsetY: 70,
+            labels:{
+              show: false,
+              format: 'dd/MM/YYYY hh:mm', 
+            },
+            tooltip: {
+              enabled: false,
             }
           },
           yaxis: {

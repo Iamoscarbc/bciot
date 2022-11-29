@@ -27,8 +27,14 @@ export default {
             title:{
               text: 'Transacciones'
             },
+            position: 'bottom',
+            offsetY: 70,
             labels:{
+              show: false,
               format: 'dd/MM/YYYY hh:mm', 
+            },
+            tooltip: {
+              enabled: false,
             }
           },
           yaxis: {
