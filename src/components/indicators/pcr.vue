@@ -1,5 +1,5 @@
 <template>
-    <VueApexCharts :type="graphic.type" :options="graphic.chartOptions" :series="series"></VueApexCharts>
+    <VueApexCharts ref="graphicPCR" :type="graphic.type" :options="graphic.chartOptions" :series="series"></VueApexCharts>
 </template>
 <script>
 import { firestore } from '~/plugins/firebase.js'
@@ -16,6 +16,10 @@ export default {
           },
           title:{
             text: 'PCR en las transacciones',
+            align: 'center'
+          },
+          subtitle:{
+            text: 'Promedio Privada: -',
             align: 'center'
           },
           xaxis: {
@@ -51,6 +55,13 @@ export default {
       items: []
     }
   },
+  watch:{
+    items(val){
+      if(val.length != 0){
+        this.getAverage()
+      }
+    }
+  },
   computed:{
     series(){
       let _this = this
@@ -59,11 +70,11 @@ export default {
           x.y = Number(x.pcr.toFixed(2))
       })
       return [{
-          name: 'PCR - Private',
+          name: 'PCR - Privada',
           data: this.items.filter(x => x.blockchain_type == 'Private')
       },
       {
-          name: 'PCR - Public',
+          name: 'PCR - Pública',
           data: this.items.filter(x => x.blockchain_type == 'Public')
       }]
     }
@@ -87,6 +98,18 @@ export default {
       let millis = param.toMillis()
       let date = new Date(millis)
       return this.$moment(date).format('DD/MM/YYYY [|] hh:mm:ss')
+    },
+    getAverage(){
+      let arrPrivate = this.items.filter(x => x.blockchain_type == 'Private')
+      let arrPcrPrivate = arrPrivate.map(x => x.pcr)
+      let sumPrivate = arrPcrPrivate.reduce((a, b) => a + b, 0)
+      let averagePrivate = sumPrivate/arrPcrPrivate.length
+      let arrPublic = this.items.filter(x => x.blockchain_type == 'Public')
+      let arrPcrPublic = arrPublic.map(x => x.pcr)
+      let sumPublic = arrPcrPublic.reduce((a, b) => a + b, 0)
+      let averagePublic = sumPublic/arrPcrPublic.length
+      this.graphic.chartOptions.subtitle.text = `Promedio Privada: ${averagePrivate.toFixed(2)} | Promedio Pública: ${averagePublic.toFixed(2)}`
+      this.$refs.graphicPCR.updateOptions(this.graphic.chartOptions, false ,true)
     }
   },
   async mounted(){
