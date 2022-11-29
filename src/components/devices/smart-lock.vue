@@ -1,11 +1,18 @@
 <template>
     <v-row justify="center" align="center">
-      <v-col cols="12" class="d-flex flex-column align-start" v-if="!loading">
-        <h2>Smart Lock {{blockchain}}</h2>
+      <v-col cols="12" class="d-flex flex-column" v-if="!loading">
+        <v-toolbar
+          class="mb-4 rounded-lg"
+          :dark="true"
+          :color="blockchain == 'Private' ? '#ff5722' : 'primary'"
+        >
+          <v-toolbar-title>{{blockchain}}</v-toolbar-title>
+        </v-toolbar>
+        <h2>Smart Lock</h2>
         <span>Estado: {{ stateLock.typeLock }}</span>
         <span v-if="duration">Último tiempo de ida y vuelta: {{ duration }}</span>
         <v-row>
-          <v-col class="d-flex flex-column align-center">
+          <v-col class="d-flex flex-column align-start">
             <v-icon class="font-size-220" color="green" v-if="stateLock.command == 'open'">mdi-door-open</v-icon>
             <v-icon class="font-size-220" color="red" v-else>mdi-door-closed-lock</v-icon>
             <v-btn 

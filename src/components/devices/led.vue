@@ -1,7 +1,14 @@
 <template>
     <v-row justify="center" align="center">
       <v-col cols="12" class="d-flex flex-column" v-if="!loading">
-        <h2>LED {{blockchain}}</h2>
+        <v-toolbar
+          class="mb-4 rounded-lg"
+          :dark="true"
+          :color="blockchain == 'Private' ? '#ff5722' : 'primary'"
+        >
+          <v-toolbar-title>{{blockchain}}</v-toolbar-title>
+        </v-toolbar>
+        <h2>LED</h2>
         <span>Estado: {{ stateLight.typeLight }}</span>
         <span v-if="duration">Último tiempo de ida y vuelta: {{ duration }}</span>
         <v-btn 
